@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+<style>
+	*{padding: 0;margin: 0;}
+	img{border:none;}
+	#div1{
+		width: 470px;height: 150px;margin: 50px auto;position: relative;overflow: hidden;
+	}
+	ul{width:470px;list-style: none;position: absolute;top: 0;left: 0;}
+	ul li{width: 470px;position: absolute;top:0;}
+	ol{
+		position: absolute;bottom: 10px;right: 10px;z-index: 2;
+	}
+	ol li{
+		list-style: none;width: 20px;height: 20px;float: left;color: orange;background:#fff;text-align: center;display: inline;margin-right: 3px;line-height: 20px;
+	}
+	.active{
+		color: #fff;background: orange;
+	}
+</style>
+<!-- <script src="miaov-move.js"></script> -->
+<script>
+window.onload=function  () {
+	var oUl=document.getElementsByTagName('ul')[0];
+	var oOl=document.getElementsByTagName('ol')[0];
+	var ali1=oUl.getElementsByTagName('li');
+	var ali2=oOl.getElementsByTagName('li');
+	var oDiv=document.getElementById('div1');
+	var width=ali1[0].offsetWidth;
+	var iNow=0;
+	for (var i = 1; i < ali1.length; i++) {
+		ali1[i].style.left=width+'px';
+	};
+	for (var i = 0; i < ali2.length; i++) {
+		ali2[i].index=i;
+		ali2[i].onmouseover=function  () {
+			for (var i = 0; i < ali2.length; i++) {
+				ali2[i].className='';
+			};
+			this.className='active';
+			//当ali2跳着划过时，不按顺序时
+			if(iNow<this.index){
+	//图片应定位在右边，在运动，产生从右到左的运动效果
+				ali1[this.index].style.left=width+'px';
+				startMove(ali1[iNow],{left:- width});
+			}
+			if(iNow>this.index){
+	//图片应定位在左边，在运动，产生从左到右的运动效果			
+				ali1[this.index].style.left=-width+'px';
+				//上一张图片也应减速运动到右边，不能一下跳到右边
+				startMove(ali1[iNow],{left:width});
+				//ali1[iNow].style.left=width+'px';
+			}
+			startMove(ali1[this.index],{left:0});
+			iNow=this.index;
+		}
+	};
+	
+
+
+}
+	
+	
+//运动框架
+function getStyle (obj,attr) {
+	if(obj.currentStyle){
+		return obj.currentStyle[attr];
+	}
+	else{
+		return getComputedStyle(obj,false)[attr];
+	}
+}
+function startMove (obj,json,fn) {
+	clearInterval(obj.timer);
+	//var speed=0;
+	obj.timer=setInterval(function  () {
+		var stop=true;
+		for(attr in json){
+			var icur=0;
+			if(attr=='opacity'){
+				icur=parseFloat(getStyle(obj,attr))*100;
+			}
+			else{
+				icur=parseInt(getStyle(obj,attr))||0;
+			}
+			var speed=(json[attr]-icur)/8;
+			speed=speed>0?Math.ceil(speed):Math.floor(speed);
+			if(icur!=json[attr]){
+				stop=false;
+			}
+			if(attr=='opacity'){
+				//icur+=speed;
+				obj.style.filter='alpha(opacity:'+(icur+speed)+')';
+				obj.style.opacity=(icur+speed)/100;
+			}
+			else{
+				obj.style[attr]=icur+speed+'px';
+			}	
+		}
+		if(stop){
+			clearInterval(obj.timer);
+			if(fn){
+				fn.call(obj);
+			}
+		}
+	},30)
+}
+</script>
+</head>
+<body>
+<div id="div1">
+	<ul>
+		<li><img src="images/1.jpg" alt=""></li>
+		<li><img src="images/2.jpg" alt=""></li>
+		<li><img src="images/3.jpg" alt=""></li>
+		<li><img src="images/4.jpg" alt=""></li>
+		<li><img src="images/5.jpg" alt=""></li>
+	</ul>
+	<ol>
+		<li class="active">1</li>
+		<li>2</li>
+		<li>3</li>
+		<li>4</li>
+		<li>5</li>
+	</ol>
+</div>	
+</body>
+</html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+<style>
+	*{padding: 0;margin: 0;}
+	img{border:none;}
+	#div1{
+		width: 470px;height: 150px;margin: 50px auto;position: relative;overflow: hidden;
+	}
+	ul{width:470px;list-style: none;position: absolute;top: 0;left: 0;}
+	ul li{width: 470px;height: 150px;display: 1none;}
+	ol{
+		position: absolute;bottom: 10px;right: 10px;z-index: 2;
+	}
+	ol li{
+		list-style: none;width: 20px;height: 20px;float: left;color: orange;background:#fff;text-align: center;display: inline;margin-right: 3px;line-height: 20px;
+	}
+	.active{
+		color: #fff;background: orange;
+	}
+</style>
+<!-- <script src="miaov-move.js"></script> -->
+<script>
+window.onload=function  () {
+	var oUl=document.getElementsByTagName('ul')[0];
+	var oOl=document.getElementsByTagName('ol')[0];
+	var ali1=oUl.getElementsByTagName('li');
+	var ali2=oOl.getElementsByTagName('li');
+	var oDiv=document.getElementById('div1');
+	var iNow=0;
+	var iNow2=0;
+	var timer=null;
+	for (var i = 0; i < ali2.length; i++) {
+		ali2[i].index=i;
+		ali2[i].onmouseover=function  () {
+			for (var i = 0; i < ali2.length; i++) {
+				ali2[i].className='';
+/*				startMove(ali1[i],{opacity:0},function (){
+					
+					this.style.display='none';
+				});*/
+
+			}
+			iNow=this.index;//当鼠标划过ali2时改变inow的值
+			iNow2=this.index;
+			this.className='active';
+			/*ali1[this.index].style.display='block';
+			startMove(ali1[this.index],{opacity:100});*/
+			startMove(oUl,{top:-ali1[0].offsetHeight*this.index});
+		}
+	}
+	timer=setInterval(goRun,1500);
+	oDiv.onmouseover=function  () {
+		clearInterval(timer);
+	}
+	oDiv.onmouseout=function(){
+		timer=setInterval(goRun,1500);
+	}
+	function goRun () {
+		if(iNow==0){
+			ali1[0].style.position='static';
+			oUl.style.top=0;
+			iNow2=0;
+		}
+		if(iNow>=ali1.length-1){
+			iNow=0;
+			ali1[0].style.position='relative';
+			ali1[0].style.top=ali1.length*ali1[0].offsetHeight+'px';
+		}
+		else{
+			iNow++;
+		}
+		for (var i = 0; i < ali2.length; i++) {
+			ali2[i].className='';
+		};
+		iNow2++;
+		ali2[iNow].className='active';
+		startMove(oUl,{top:-ali1[0].offsetHeight*iNow2});
+		document.title=iNow2+'|'+iNow;
+	}
+
+}
+	
+	
+//运动框架
+function getStyle (obj,attr) {
+	if(obj.currentStyle){
+		return obj.currentStyle[attr];
+	}
+	else{
+		return getComputedStyle(obj,false)[attr];
+	}
+}
+function startMove (obj,json,fn) {
+	clearInterval(obj.timer);
+	//var speed=0;
+	obj.timer=setInterval(function  () {
+		var stop=true;
+		for(attr in json){
+			var icur=0;
+			if(attr=='opacity'){
+				icur=parseFloat(getStyle(obj,attr))*100;
+			}
+			else{
+				icur=parseInt(getStyle(obj,attr));
+			}
+			var speed=(json[attr]-icur)/8;
+			speed=speed>0?Math.ceil(speed):Math.floor(speed);
+			if(icur!=json[attr]){
+				stop=false;
+			}
+			if(attr=='opacity'){
+				//icur+=speed;
+				obj.style.filter='alpha(opacity:'+(icur+speed)+')';
+				obj.style.opacity=(icur+speed)/100;
+			}
+			else{
+				obj.style[attr]=icur+speed+'px';
+			}	
+		}
+		if(stop){
+			clearInterval(obj.timer);
+			if(fn){
+				fn.call(obj);
+			}
+		}
+	},30)
+}
+</script>
+</head>
+<body>
+<div id="div1">
+	<ul>
+		<li><img src="images/1.jpg" alt=""></li>
+		<li><img src="images/2.jpg" alt=""></li>
+		<li><img src="images/3.jpg" alt=""></li>
+		<li><img src="images/4.jpg" alt=""></li>
+		<li><img src="images/5.jpg" alt=""></li>
+	</ul>
+	<ol>
+		<li class="active">1</li>
+		<li>2</li>
+		<li>3</li>
+		<li>4</li>
+		<li>5</li>
+	</ol>
+</div>	
+</body>
+</html>

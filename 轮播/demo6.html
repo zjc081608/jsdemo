@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+<style>
+	*{padding: 0;margin: 0;}
+	img{border:none;}
+	#div1{
+		width: 470px;height: 150px;margin: 50px auto;position: relative;overflow: hidden;
+	}
+	ul{width:470px;list-style: none;position: absolute;top: 0;left: 0;}
+	ul li{width: 470px;position: absolute;top:0;}
+	ol{
+		position: absolute;bottom: 10px;right: 10px;z-index: 2;
+	}
+	ol li{
+		list-style: none;width: 20px;height: 20px;float: left;color: orange;background:#fff;text-align: center;display: inline;margin-right: 3px;line-height: 20px;
+	}
+	.active{
+		color: #fff;background: orange;
+	}
+</style>
+<!-- <script src="miaov-move.js"></script> -->
+<script>
+window.onload=function  () {
+	var oUl=document.getElementsByTagName('ul')[0];
+	var ali1=oUl.getElementsByTagName('li');
+	var num=Math.ceil(ali1[0].offsetWidth/ali1.length);
+	for (var i = 0; i < ali1.length; i++) {
+		ali1[i].style.left=num*i+'px';
+	};
+	for (var i = 0; i < ali1.length; i++) {
+		ali1[i].index=i;
+		ali1[i].onmouseover=function(){
+			for (var i = 0; i < ali1.length; i++) {
+				if(i<=this.index){
+					startMove(ali1[i],{left:30*i});
+				}
+				else{
+					startMove(ali1[i],{left:(470-120)+(i-1)*30});
+				}
+			};	
+		}
+		ali1[i].onmouseout=function(){
+			for (var i = 0; i < ali1.length; i++) {
+				startMove(ali1[i],{left:num*i});	
+			};
+			
+		}
+	};
+
+
+}
+	
+	
+//运动框架
+function getStyle (obj,attr) {
+	if(obj.currentStyle){
+		return obj.currentStyle[attr];
+	}
+	else{
+		return getComputedStyle(obj,false)[attr];
+	}
+}
+function startMove (obj,json,fn) {
+	clearInterval(obj.timer);
+	//var speed=0;
+	obj.timer=setInterval(function  () {
+		var stop=true;
+		for(attr in json){
+			var icur=0;
+			if(attr=='opacity'){
+				icur=parseFloat(getStyle(obj,attr))*100;
+			}
+			else{
+				icur=parseInt(getStyle(obj,attr))||0;
+			}
+			var speed=(json[attr]-icur)/8;
+			speed=speed>0?Math.ceil(speed):Math.floor(speed);
+			if(icur!=json[attr]){
+				stop=false;
+			}
+			if(attr=='opacity'){
+				//icur+=speed;
+				obj.style.filter='alpha(opacity:'+(icur+speed)+')';
+				obj.style.opacity=(icur+speed)/100;
+			}
+			else{
+				obj.style[attr]=icur+speed+'px';
+			}	
+		}
+		if(stop){
+			clearInterval(obj.timer);
+			if(fn){
+				fn.call(obj);
+			}
+		}
+	},30)
+}
+</script>
+</head>
+<body>
+<div id="div1">
+	<ul>
+		<li><img src="images/1.jpg" alt=""></li>
+		<li><img src="images/2.jpg" alt=""></li>
+		<li><img src="images/3.jpg" alt=""></li>
+		<li><img src="images/4.jpg" alt=""></li>
+		<li><img src="images/5.jpg" alt=""></li>
+	</ul>
+</div>	
+</body>
+</html>
