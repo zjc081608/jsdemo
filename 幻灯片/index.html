@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>幻灯片</title>
+	<link rel="stylesheet" href="css/style.css">
+	<!--<script src="js/move2.js"></script>
+	<script src="js/qq.js"></script> -->
+	<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+	crossorigin="anonymous"></script>
+	<script src="js/tween.js"></script>
+	<script>
+$(document).ready(function(){
+	(function(){
+		var box=$('#box');
+		var pLi=$('#pic-list').find('li');
+		var h2=$('#text-list').find('h2');
+		var oUl=$('#icon-list').find('ul');
+		var iLi=oUl.find('li');
+		var prev=$('#btnl');
+		var next=$('#btnr');
+		var iNow=0;
+		var num=0;
+		var timer=null;
+		var w=iLi.eq(0).width();
+		iLi.each(function(index){
+			$(this).click(function(){
+				
+				num=index;
+
+				tab();
+			})
+		});
+		prev.click(function(){
+			
+			if (iNow>0) {
+				iNow--;
+				play();
+				/*next.attr('class','iNow==7?"btn":"btn showBtn"');
+				prev.className=iNow==0?'btn':'btn showBtn';
+				next.className=iNow==7?'btn':'btn showBtn';*/
+			};
+
+		});
+		next.click(function(){
+			
+			if (iNow<7) {
+				iNow++;
+				play();
+			};
+			console.log(iNow)
+		})
+		function tab () {
+			h2.css('display','none');
+				iLi.removeClass('active');
+				pLi.animate({'opacity':0},80)
+				iLi.eq(num).addClass('active');
+				pLi.eq(num).animate({'opacity':1},80);
+				h2.eq(num).css('display','block');
+		}
+		function play () {
+			oUl.animate({'left':-w*iNow});
+				prev.attr('class',function(){
+					return iNow==0?'btn':'btn showBtn';
+				});
+				next.attr('class',function(){
+					return iNow==7?'btn':'btn showBtn';
+				});
+		}
+		function doMove(){
+			timer=setInterval(function autoPlay (){
+				num++;
+				if (num>=14) {
+					num=0;
+				}
+				if (num>=iNow+7) {
+					iNow=num-6;
+				}
+				if (num<iNow) {
+					iNow=num;
+				}
+				tab();
+				play();
+			},2000)
+		}
+		doMove();
+		box.hover(function(){clearInterval(timer)},function(){doMove()});
+	})();
+})
+	</script>
+</head>
+<body>
+<div id="box">
+	<ul id="pic-list">
+		<li style="z-index:2;"><a href="#"><img src="img/pic_1.jpg"></a></li>
+		<li><a href="#"><img src="img/pic_2.jpg"></a></li>
+		<li><a href="#"><img src="img/pic_3.jpg"></a></li>
+		<li><a href="#"><img src="img/pic_4.jpg"></a></li>
+		<li><a href="#"><img src="img/pic_5.jpg"></a></li>
+		<li><a href="#"><img src="img/pic_6.jpg"></a></li>
+		<li><a href="#"><img src="img/pic_7.jpg"></a></li>
+		<li><a href="#"><img src="img/pic_8.jpg"></a></li>
+		<li><a href="#"><img src="img/pic_9.jpg"></a></li>
+		<li><a href="#"><img src="img/pic_10.jpg"></a></li>
+		<li><a href="#"><img src="img/pic_11.jpg"></a></li>
+		<li><a href="#"><img src="img/pic_12.jpg"></a></li>
+		<li><a href="#"><img src="img/pic_13.jpg"></a></li>
+		<li><a href="#"><img src="img/pic_14.jpg"></a></li>
+	</ul>
+	<div class="mark"></div>
+	<ul id="text-list">
+		<li><h2 class="show"><a href="#">《武则天秘史》[至22集]姐姐与皇上偷情，媚娘抓奸在床...</a></h2></li>
+		<li><h2><a href="#">《无底洞》金钱、美女、权利、复仇等欲望让人不可自拔...</a></h2></li>
+		<li><h2><a href="#">《巴黎宝贝》邓超巴黎当奶爸，上演基情、卖萌、跨国恋..</a></h2></li>
+		<li><h2><a href="#">《我的女儿是花儿》[至3集]“富二代”冰王子恋上贫家女..</a></h2></li>
+		<li><h2><a href="#">《法证先锋3》[至26集]写字楼惊现“女僵尸”尸体！</a></h2></li>
+		<li><h2><a href="#">《非常了得》孟非郭德纲大曝台下私生活，内地Hold姐来挑战</a></h2></li>
+		<li><h2><a href="#">第二届九分钟电影11月20日独家首映 视觉盛宴恭迎各位看官</a></h2></li>
+		<li><h2><a href="#">《快女微电影》 洪辰脸伤痊愈 快女微电影收官作复拍</a></h2></li>
+		<li><h2><a href="#">《称心如意》京城第一“育婴男”Hold住全场 萝莉热舞走光</a></h2></li>
+		<li><h2><a href="#">《男人帮》[全30集]悲喜双响炮，一个完美结局</a></h2></li>
+		<li><h2><a href="#">《辛亥革命》成龙、赵文瑄、李冰冰、胡歌演绎革命腥风血雨</a></h2></li>
+		<li><h2><a href="#">《李献计历险记》房祖名患差时症为寻女友开启超时空冒险</a></h2></li>
+		<li><h2><a href="#">Justin bieber女友动感热单全球首发。</a></h2></li>
+		<li><h2><a href="#">第八届中国（重庆）国际园林博览会</a></h2></li>
+	</ul>
+	<div id="icon-list">
+		<ul>
+		<li class="active"><a href="#"><img src="img/ico_1.jpg"></a></li>
+		<li><a href="#"><img src="img/ico_2.jpg"></a></li>
+		<li><a href="#"><img src="img/ico_3.jpg"></a></li>
+		<li><a href="#"><img src="img/ico_4.jpg"></a></li>
+		<li><a href="#"><img src="img/ico_5.jpg"></a></li>
+		<li><a href="#"><img src="img/ico_6.jpg"></a></li>
+		<li><a href="#"><img src="img/ico_7.jpg"></a></li>
+		<li><a href="#"><img src="img/ico_8.jpg"></a></li>
+		<li><a href="#"><img src="img/ico_9.jpg"></a></li>
+		<li><a href="#"><img src="img/ico_10.jpg"></a></li>
+		<li><a href="#"><img src="img/ico_11.jpg"></a></li>
+		<li><a href="#"><img src="img/ico_12.jpg"></a></li>
+		<li><a href="#"><img src="img/ico_13.jpg"></a></li>
+		<li><a href="#"><img src="img/ico_14.jpg"></a></li>
+		</ul>
+	</div>
+	<a href="#" id="btnl" class="btn"></a>
+	<a href="#" id="btnr" class="btn showBtn"></a>
+</div>
+</body>
+</html>
