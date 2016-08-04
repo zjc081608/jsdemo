@@ -6,4 +6,5 @@
 [轮播2](https://zjc081608.github.io/jsdemo/轮播/demo4.html)
 [轮播3](https://zjc081608.github.io/jsdemo/轮播/demo5.html)
 [轮播4](https://zjc081608.github.io/jsdemo/轮播/demo6.html)<br>
-[仿flash](https://zjc081608.github.io/jsdemo/仿flash/index.html)
+[仿flash](https://zjc081608.github.io/jsdemo/仿flash/index.html)<br>
+[幻灯片](https://zjc081608.github.io/jsdemo/幻灯片/index.html)<br>
