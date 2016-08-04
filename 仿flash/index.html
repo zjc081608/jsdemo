@@ -1,0 +1,134 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+  <title>仿flash图片</title>
+<link rel="stylesheet" type="text/css" href="css.css">  
+<script src="move.js"></script>
+<script>
+    //获取classname兼容方法
+function getByClass(parent,oclass){
+    var aEle=document.getElementsByTagName('*');
+    var aResult=[];
+    for(i=0;i<aEle.length;i++){
+        if(aEle[i].className==oclass){
+            aResult.push(aEle[i]);
+        }
+    }
+    return aResult;
+}
+window.onload=function(){
+    var odiv=document.getElementById('playimages');
+    var onext=getByClass(odiv,'next')[0];
+    var oprev=getByClass(odiv,'prev')[0];
+    var omarkleft=getByClass(odiv,'mark_left')[0];
+    var omarkright=getByClass(odiv,'mark_right')[0];
+
+    var osmallul=getByClass(odiv,'small_pic')[0].getElementsByTagName('ul')[0];
+    var osmallli=osmallul.getElementsByTagName('li');
+    var obigul=getByClass(odiv,'big_pic')[0];
+    var obigli=obigul.getElementsByTagName('li');
+    var inow=0;
+    var iminzindex=2;
+    osmallul.style.width=osmallli.length*osmallli[0].offsetWidth+'px';
+
+    //左右按钮
+   oprev.onmouseover=omarkleft.onmouseover=function(){
+    startMove(oprev,'opacity',100);
+   }
+   oprev.onmouseout=omarkleft.onmouseout=function(){
+    startMove(oprev,'opacity',0);
+   }
+   onext.onmouseover=omarkright.onmouseover=function(){
+    startMove(onext,'opacity',100);
+   }
+   onext.onmouseout=omarkright.onmouseout=function(){
+    startMove(onext,'opacity',0);
+   }
+   //
+   for(i=0;i<osmallli.length;i++){
+        osmallli[i].index=i;
+        osmallli[i].onmouseover=function(){
+            startMove(this,'opacity',100);
+        }
+        osmallli[i].onmouseout=function(){
+            if(this.index!=inow){
+            startMove(this,'opacity',60);
+            }
+        }
+        osmallli[i].onclick=function(){
+            if(this.index==inow)return;
+            inow=this.index;
+            tab();
+        }
+        function tab(){
+            for(i=0;i<osmallli.length;i++){
+                startMove(osmallli[i],'opacity',60)
+            }
+            startMove(osmallli[inow],'opacity',100);
+            obigli[inow].style.zIndex=iminzindex++;
+            obigli[inow].style.height=0;
+
+            startMove(obigli[inow],'height',obigul.offsetHeight);
+            if(inow==0){
+                startMove(osmallul,'left',0)
+            }
+            else if(inow==osmallli.length-1){
+            startMove(osmallul,'left',-(inow-2)*osmallli[0].offsetWidth)    
+            }
+            else{
+            startMove(osmallul,'left',-(inow-1)*osmallli[0].offsetWidth)
+            }
+        }
+        oprev.onclick=function(){
+            inow--;
+            if(inow==-1){
+                inow=osmallli.length-1;
+            }
+            tab();
+        }
+        onext.onclick=function(){
+            inow++;
+            if(inow==osmallli.length){
+                inow=0;
+            }
+            tab();
+        }
+   }
+}
+</script>
+</head>  
+<body>
+<div id="playimages" class="play">
+    <ul class="big_pic">
+		<div class="prev"></div>
+		<div class="next"></div>
+
+		<div class="text">加载图片说明……</div>
+		<div class="length">计算图片数量……</div>
+		
+		<a class="mark_left" href="javascript:;"></a>
+		<a class="mark_right" href="javascript:;"></a>
+		<div class="bg"></div>
+		
+        <li style="z-index:1;"><img src="images/1.jpg" /></li>
+        <li><img src="images/2.jpg" /></li>
+        <li><img src="images/3.jpg" /></li>
+        <li><img src="images/4.jpg" /></li>
+        <li><img src="images/5.jpg" /></li>
+        <li><img src="images/6.jpg" /></li>
+    </ul>
+    <div class="small_pic">
+        <ul style="width:390px;">
+            <li style="filter: 100; opacity: 1;"><img src="images/1.jpg" /></li>
+            <li><img src="images/2.jpg" /></li>
+            <li><img src="images/3.jpg" /></li>
+            <li><img src="images/4.jpg" /></li>
+            <li><img src="images/5.jpg" /></li>
+            <li><img src="images/6.jpg" /></li>
+        </ul>
+    </div>
+</div>
+
+</body>
+</html>
